@@ -1496,12 +1496,16 @@ c nonrecoverable error from psol.  set iersl and return.
          iersl = 9
          return
          endif
+      if (iersl .eq. 1) then 
+        iersl = 7
+        return
+        endif
       if ( (iersl .gt. 0) .and. (ipflg .ne. 0) ) then
         if (ipcur .eq. 0) go to 10
         endif
 c iersl=1 on return from solpk means there was a breakdown in the
 c krylov iteration.  set iersl=7 to halt iteration and return.
-      if (iersl .eq. 1) iersl = 7
+c      if (iersl .eq. 1) iersl = 7
 c
       return
 c----------------------- end of subroutine model -----------------------
