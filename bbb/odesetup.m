@@ -1038,7 +1038,7 @@ c ... Set up tables for impurity atomic-physics processes.
       elseif (isimpon .eq. 2) then	# data supplied by D. Post 1993
          call readpost(coronalimpfname)
          call splinem
-         call remark('*** For isimpon=2, set afracs, not afrac ***')
+c         call remark('*** For isimpon=2, set afracs, not afrac ***')
       elseif ((isimpon .eq. 3) .and. (nzspt .gt. 0)) then    # avg-ion
          impflag = 1
          crni = 1.
