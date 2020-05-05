@@ -1610,7 +1610,7 @@ c...  Construct first intermediate velocity grid (xvnrmox,yvnrmnox)
 
 c...  Construct second intermediate velocity grid (xvnrmnx,yvnrmnx)
       do ir = 1, 3*nxpt
-        call grdintpy(ixsto(ir),ixendo(i),ixst(ir),ixend(ir),
+        call grdintpy(ixsto(ir),ixendo(ir),ixst(ir),ixend(ir),
      .                0,ny+1,0,ny+1,nxold,ny,nx,ny,
      .                xvnrmox,yvnrmox,xvnrm,yvnrm,xvnrmnx,yvnrmnx,
      .                ixv2g,iyv2g)

@@ -7931,7 +7931,7 @@ ccc            if (isngonxy(ix,iy,1) .eq. 1) nbidot = cngtgx(1)*yldot(idxg(ix,iy
   255       continue
             do igsp = 1, ngsp
                nbg2dot(igsp) = 0.
-               if(isngonxy(ix,iy,ifld) == 1) then
+               if(isngonxy(ix,iy,igsp) == 1) then
                  iv = idxg(ix,iy,igsp)
                  nbg2dot(igsp) = yldot(iv)*n0g(igsp)
                endif
