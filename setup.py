@@ -200,7 +200,8 @@ setup(name="uedge",
                              extra_compile_args=fcompiler.extra_compile_args
                              )],
       # note that include_dirs may have to be expanded in the line above
-      install_requires=["forthon", "mppl", "numpy", "matplotlib", "h5py"],
+      install_requires=["forthon", "mppl", "numpy", "matplotlib", "h5py", "colorama"],
+      python_requires='>=3.5',
       cmdclass={'build': uedgeBuild, 'clean': uedgeClean},
       classifiers=['Programming Language :: Python',
                    'Programming Language :: Python :: 3']
