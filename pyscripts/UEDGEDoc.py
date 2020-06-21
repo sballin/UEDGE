@@ -6,27 +6,22 @@ Created on Mon Jan 27 02:17:25 2020
 """
 
 from colorama import Fore, Back, Style
-
-
-import colorama
-from colorama import Fore, Style,Back
-
-
 import uedge
-# from uedge import *
 from . import UEDGEToolBox
+
+
 class UedgeDoc(object):
     
     #---------------------------------------------------------------------------
     def __init__(self,PackageList=[],Verbose=False,Debug=True):
-            self.ListPkg=UEDGEToolBox.GetListPackage()
-            self.DocPkg={}
-            self.DocGrp={}
-            self.DocCom={}
-            self._OnlyVar=False
-            
-            print('# Setup documentation of UEDGE')
-            self.SetupDoc()
+        self.ListPkg=UEDGEToolBox.GetListPackage()
+        self.DocPkg={}
+        self.DocGrp={}
+        self.DocCom={}
+        self._OnlyVar=False
+        
+        print('# Setup documentation of UEDGE')
+        self.SetupDoc()
     #---------------------------------------------------------------------------
     def ListGrp(self,Str=None,OnlyVar=True):
         if Str is None:

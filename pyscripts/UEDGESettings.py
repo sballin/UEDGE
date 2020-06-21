@@ -7,12 +7,11 @@ Created on Wed Feb 26 22:09:43 2020
 """
 
 import sys,os
-import easygui
 import platform,inspect
 import configparser
 import getpass
 
-import numpy as np
+
 class UEDGESettings():
     def __init__(self):
         
@@ -63,91 +62,88 @@ class UEDGESettings():
             print('Cannot parse the config file:',self.ConfigFileName)
             return None
     def CreateStamp(self): 
-            from uedge import bbb
-            Stamp={}
-            Stamp['time'] = time.time()
-            Stamp['ctime'] = time.ctime()
-            Stamp['User']=self.UserName
-            Stamp['Version'] = bbb.uedge_ver
-            Stamp['PlatForm'] = self.Platform 
+        from uedge import bbb
+        Stamp={}
+        Stamp['time'] = time.time()
+        Stamp['ctime'] = time.ctime()
+        Stamp['User']=self.UserName
+        Stamp['Version'] = bbb.uedge_ver
+        Stamp['PlatForm'] = self.Platform 
         
 def CreateUEDGESettingsFile():
-        config = configparser.ConfigParser()
-        GetInput=True
-        while GetInput:
-            UserName=input('Enter the username:')
-            
-            RunDir=easygui.diropenbox(title='Select RunDir for pyUEDGE',default='.')
-            SaveDir=easygui.diropenbox(title='Select SaveDir for pyUEDGE',default='.')
-            InputDir=easygui.diropenbox(title='Select InputDir for pyUEDGE',default='.')
-            if RunDir is None:
-                RunDir=os.getcwd()
-            if SaveDir is None:
-                RunDir=os.getcwd()
-            if InputDir is None:
-                InputDir=os.getcwd()
-            if UserName is None:
-                UserName='unknown'
-            RunDir=os.path.os.path.abspath(RunDir)
-            SaveDir=os.path.os.path.abspath(SaveDir)
-            InputDir=os.path.os.path.abspath(InputDir)
-            print(' # Settings:')
-            print('  - UserName:',UserName)
-            print('  - RunDir:',RunDir)
-            print('  - SaveDir:',SaveDir)
-            print('  - InputDir:',InputDir)
-            if QueryYesNo('Are these settings correct?'):
-               config['UEDGE']={}
-               config['UEDGE']['UserName']=UserName
-               config['UEDGE']['RunDir']=RunDir
-               config['UEDGE']['SaveDir']=SaveDir
-               config['UEDGE']['InputDir']=InputDir
-               ConfigFileName=os.path.join(os.path.expanduser("~"),'.UedgeSettings')
-               with open(ConfigFileName, 'w') as f:
-                   config.write(f)
-               print(' # Creation of the config file:'+ConfigFileName)
-               GetInput=False
-               return
-            elif not QueryYesNo('Enter the settings again?'):
-               print(' # The config file .UEDGEInfo has not been created in the home folder...') 
-               GetInput=False
-               return 
-
-
-
+    config = configparser.ConfigParser()
+    GetInput=True
+    while GetInput:
+        UserName=input('Enter the username:')
+        
+        RunDir=input('Select RunDir for pyUEDGE (empty = use current)')
+        SaveDir=input('Select SaveDir for pyUEDGE (empty = use current)')
+        InputDir=input('Select InputDir for pyUEDGE (empty = use current)')
+        if not RunDir:
+            RunDir=os.getcwd()
+        if not SaveDir:
+            RunDir=os.getcwd()
+        if not InputDir:
+            InputDir=os.getcwd()
+        if not UserName:
+            UserName='unknown'
+        RunDir=os.path.os.path.abspath(RunDir)
+        SaveDir=os.path.os.path.abspath(SaveDir)
+        InputDir=os.path.os.path.abspath(InputDir)
+        print(' # Settings:')
+        print('  - UserName:',UserName)
+        print('  - RunDir:',RunDir)
+        print('  - SaveDir:',SaveDir)
+        print('  - InputDir:',InputDir)
+        if QueryYesNo('Are these settings correct?'):
+            config['UEDGE']={}
+            config['UEDGE']['UserName']=UserName
+            config['UEDGE']['RunDir']=RunDir
+            config['UEDGE']['SaveDir']=SaveDir
+            config['UEDGE']['InputDir']=InputDir
+            ConfigFileName=os.path.join(os.path.expanduser("~"),'.UedgeSettings')
+            with open(ConfigFileName, 'w') as f:
+                config.write(f)
+            print(' # Creation of the config file:'+ConfigFileName)
+            GetInput=False
+            return
+        elif not QueryYesNo('Enter the settings again?'):
+            print(' # The config file .UEDGEInfo has not been created in the home folder...') 
+            GetInput=False
+            return 
 
 
 def QueryYesNo(question, default="no"):
-        """Ask a yes/no question via input() and return their answer.
-    
-        "question" is a string that is presented to the user.
-        "default" is the presumed answer if the user just hits <Enter>.
-            It must be "yes" (the default), "no" or None (meaning
-            an answer is required of the user).
-    
-        The "answer" return value is True for "yes" or False for "no".
-        """
-        valid = {"yes": True, "y": True, "ye": True,
-                 "no": False, "n": False}
-        if default is None:
-            prompt = " [y/n] "
-        elif default == "yes":
-            prompt = " [Y/n] "
-        elif default == "no":
-            prompt = " [y/N] "
+    """Ask a yes/no question via input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+        It must be "yes" (the default), "no" or None (meaning
+        an answer is required of the user).
+
+    The "answer" return value is True for "yes" or False for "no".
+    """
+    valid = {"yes": True, "y": True, "ye": True,
+             "no": False, "n": False}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
         else:
-            raise ValueError("invalid default answer: '%s'" % default)
-    
-        while True:
-            sys.stdout.write(question + prompt)
-            choice = input().lower()
-            if default is not None and choice == '':
-                return valid[default]
-            elif choice in valid:
-                return valid[choice]
-            else:
-                sys.stdout.write("Please respond with 'yes' or 'no' "
-                                 "(or 'y' or 'n').\n")  
+            sys.stdout.write("Please respond with 'yes' or 'no' "
+                             "(or 'y' or 'n').\n")  
                 
 Settings=UEDGESettings()
 S=Settings
