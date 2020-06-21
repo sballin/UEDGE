@@ -116,7 +116,6 @@ def fnconvert(name,suffixout):
     return nameout
 
 from stat import ST_MTIME
-from numpy import greater
 def newer(file0,file1):
     # returns 1 if file0 is newer than file1, 0 otherwise
     # if file0 does not exist, raise a standard python error
@@ -126,7 +125,7 @@ def newer(file0,file1):
         time1 = os.stat(file1)[ST_MTIME]
     except:
         return 2
-    return greater(time0,time1)
+    return time0 > time1
 
 class processdirs:
     # Process a list of directories to do conversions with processall
