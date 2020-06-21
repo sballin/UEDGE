@@ -1,28 +1,25 @@
-#!/usr/bin/env python
 # To use:
 #       python setup.py install
 #
 import sys
 import os
 import os.path
-import string
 import site
-from Forthon.compilers import FCompiler
 import getopt
+from subprocess import call
+import numpy
+from Forthon.compilers import FCompiler
 
 version='7.0.9.2.0rc1'
 
 try:
     os.environ['PATH'] += os.pathsep + site.USER_BASE + '/bin'
-    import distutils
     from distutils.core import setup
     from distutils.core import Extension
     from distutils.dist import Distribution
     from distutils.command.build import build
-    from subprocess import call
-    import numpy
-except:
-    raise SystemExit("Distutils problem")
+except Exception as e:
+    raise SystemExit("Distutils problem: " + str(e))
 
 optlist, args = getopt.getopt(sys.argv[1:], 'gt:F:', ['parallel', 'petsc'])
 machine = sys.platform
@@ -104,7 +101,7 @@ uedgeobjects = []
 if sys.hexversion < 0x03000000:
     builddir = 'build'
     for pkg in uedgepkgs:
-         uedgeobjects = uedgeobjects + makeobjects(pkg)
+        uedgeobjects = uedgeobjects + makeobjects(pkg)
     uedgeobjects = uedgeobjects + ['aphrates.o', 'aphread.o',
                                    'apifcn.o', 'apip93.o', 'apisorc.o',
                                    'fimp.o', 'fmombal.o', 'inelrates.o',
@@ -173,10 +170,9 @@ define_macros=[("WITH_NUMERIC", "0"),
 rlncom = "echo \"int main(){}\" | gcc -x c -lreadline - "
 rln = os.system(rlncom)
 if rln == 0: 
-   define_macros = define_macros + [("HAS_READLINE","1")]
-   os.environ["READLINE"] = "-l readline"
-   libraries = ['readline'] + libraries
-
+    define_macros = define_macros + [("HAS_READLINE","1")]
+    os.environ["READLINE"] = "-l readline"
+    libraries = ['readline'] + libraries
 
 setup(name="uedge",
       version=version,
@@ -203,12 +199,9 @@ setup(name="uedge",
                              fcompiler.extra_link_args,
                              extra_compile_args=fcompiler.extra_compile_args
                              )],
-
-      cmdclass={'build': uedgeBuild, 'clean': uedgeClean},
-      test_suite="pytests",
-      install_requires=['forthon', 'mppl'],
       # note that include_dirs may have to be expanded in the line above
+      install_requires=["forthon", "mppl", "numpy", "matplotlib", "h5py"],
+      cmdclass={'build': uedgeBuild, 'clean': uedgeClean},
       classifiers=['Programming Language :: Python',
                    'Programming Language :: Python :: 3']
-
       )
