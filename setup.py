@@ -159,8 +159,8 @@ if parallel:
     libraries = fcompiler.libs + ['mpi']
     # uedgeobjects = uedgeobjects + ['/usr/local/mpi/ifc_farg.o']
 
-with open('pyscripts/__version__.py','w') as ff:
-    ff.write("__version__ = '%s'\n"%version)
+with open('pyscripts/version.py','w') as ff:
+    ff.write("version = '%s'\n" % version)
 
 define_macros=[("WITH_NUMERIC", "0"),
                ("FORTHON_PKGNAME", '\"uedgeC\"'),

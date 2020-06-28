@@ -1,13 +1,7 @@
 import numpy as np
 import h5py
-import uedge
-try:
-    import __version__ as pyv
-    pyver = pyv.__version__
-except:
-    pyver = uedge.__version__
-from .uedge import bbb
-from .uedge_lists import *
+from uedge import bbb, __version__
+from uedge.uedge_lists import *
 import time
 
 
@@ -123,7 +117,7 @@ def hdf5_save(file, varlist=['bbb.ngs', 'bbb.ng',
         hfb.attrs['code'] = 'UEDGE'
         hfb.attrs['ver'] = bbb.uedge_ver
         try:
-            hfb.attrs['pyver'] = pyver
+            hfb.attrs['pyver'] = __version__
             grps['bbb']['vars'].append('pyver')
         except:
             print("couldn\'t write pyver to header")
@@ -213,7 +207,7 @@ def hdf5_dump(file, packages=list_packages(objects=1), vars=None, globals=None):
         hfg.attrs['code'] = 'UEDGE'
         hfg.attrs['ver'] = bbb.uedge_ver
         try:
-            hfg.attrs['pyver'] = pyver
+            hfg.attrs['pyver'] = __version__
         except:
             pass
         for v in list_package_variables(p, vars=vars):
@@ -238,7 +232,7 @@ def hdf5_dump(file, packages=list_packages(objects=1), vars=None, globals=None):
         hfg.attrs['code'] = 'UEDGE'
         hfg.attrs['ver'] = bbb.uedge_ver
         try:
-            hfg.attrs['pyver'] = pyver
+            hfg.attrs['pyver'] = __version__
         except:
             pass
         for v in list(set(globals.keys()) & set(vars)):
