@@ -2,21 +2,20 @@ import numpy as np
 import h5py
 import uedge
 try:
-   import __version__ as pyv
-   pyver = pyv.__version__
+    import __version__ as pyv
+    pyver = pyv.__version__
 except:
-   pyver = uedge.__version__
+    pyver = uedge.__version__
 from .uedge import bbb
-from .uedge import com
 from .uedge_lists import *
 import time
 
 
 def hdf5_restore(file):
     """
-        Read a hdf5 file previously written from pyUedge. This reads the file recursively 
-        and will attempt to restore all datasets. This will restore a file saved by either
-        hdf5_save or hdf5_dump.
+    Read a hdf5 file previously written from pyUedge. This reads the file recursively 
+    and will attempt to restore all datasets. This will restore a file saved by either
+    hdf5_save or hdf5_dump.
     """
     try:
         hf = h5py.File(file, 'r')
@@ -28,9 +27,9 @@ def hdf5_restore(file):
         dummy = hf['bbb']   # force an exception if the group not there
         hfb = hf.get('bbb')
         try:
-           hdf5_restore_dump(file,hdffile=hf)
+            hdf5_restore_dump(file,hdffile=hf)
         except:
-           raise
+            raise
         
 
     except:
@@ -119,7 +118,6 @@ def hdf5_save(file, varlist=['bbb.ngs', 'bbb.ng',
         hfb = hf.create_group('bbb')
         grps['bbb'] = {'h5': hfb}
         grps['bbb']['vars'] = ['uedge_ver']
-        grps['bbb']
         hfb.attrs['time'] = time.time()
         hfb.attrs['ctime'] = time.ctime()
         hfb.attrs['code'] = 'UEDGE'
@@ -195,9 +193,9 @@ def hdf5_save(file, varlist=['bbb.ngs', 'bbb.ng',
 
 def hdf5_dump(file, packages=list_packages(objects=1), vars=None, globals=None):
     """
-       Dump all variables from a list of package objects into a file.
-       Default packages are output of uedge.uedge_lists.list_packages() 
-       vars=[varlist] dump limited to intersection of varlist and packages
+    Dump all variables from a list of package objects into a file.
+    Default packages are output of uedge.uedge_lists.list_packages() 
+    vars=[varlist] dump limited to intersection of varlist and packages
     """
     try:
         hf = h5py.File(file, 'w')
@@ -273,21 +271,21 @@ def h5py_dataset_iterator(g, prefix=''):
                 yield (path, item)
 
 
-def hdf5_restore_dump(file, scope=globals(),hdffile=None):
+def hdf5_restore_dump(file, hdffile=None):
     """
-       Restore all variables from a previously saved HDF5 file.
-       This is called by hdf5_restore and the recommended way
-       to restore.
+    Restore all variables from a previously saved HDF5 file.
+    This is called by hdf5_restore and the recommended way
+    to restore.
     """
     prfileattrs = True
     if hdffile == None:
-       try:
-           hf = h5py.File(file, 'r')
-       except:
-           print("Couldn't open hdf5 file ", file)
-           raise
+        try:
+            hf = h5py.File(file, 'r')
+        except:
+            print("Couldn't open hdf5 file ", file)
+            raise
     else:
-       hf = hdffile
+        hf = hdffile
     try:
         try:
             g = hf['bbb']
@@ -303,17 +301,17 @@ def hdf5_restore_dump(file, scope=globals(),hdffile=None):
             print('No file attributes, trying to restore')
 
         for (path, dset) in h5py_dataset_iterator(hf):
-           vt = path.split('/')
-           pck = packagename2object(vt[1])
-           po = pck.getpyobject(vt[2])
-           try:
-               if dset.size > 1:
-                  po[...] = np.array(dset[()])
-               else:
-                  setattr(pck,vt[2],dset[()])
-           except:
-               print('Couldn\'t read dataset ', path)
-               raise
+            vt = path.split('/')
+            pck = packagename2object(vt[1])
+            po = pck.getpyobject(vt[2])
+            try:
+                if dset.size > 1:
+                    po[...] = np.array(dset[()])
+                else:
+                    setattr(pck,vt[2],dset[()])
+            except:
+                print('Couldn\'t read dataset ', path)
+                raise
     except:
         print("Couldn't read hdf5 file ", file)
         raise
