@@ -1,8 +1,8 @@
+import time
 import numpy as np
 import h5py
 from uedge import bbb, __version__
 from uedge.uedge_lists import *
-import time
 
 
 def hdf5_restore(file):
