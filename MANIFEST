@@ -21,7 +21,6 @@ a.out
 convertor
 forthonf2c.h
 localrules.py
-localrules.pyc
 mppl.h
 pck
 setup.py
@@ -133,7 +132,6 @@ jupyter/README
 jupyter/aeqdsk
 jupyter/case_setup.py
 jupyter/case_setup2.py
-jupyter/case_setup2.pyc
 jupyter/d3d.hdf5
 jupyter/d3d.pdb
 jupyter/gridue
@@ -148,7 +146,6 @@ pyscripts/.#uedgeplots.py.1.6
 pyscripts/PRpyt.py
 pyscripts/PWpyt.py
 pyscripts/__init__.py
-pyscripts/__version__.py
 pyscripts/aph.dat
 pyscripts/api.dat
 pyscripts/bas2py
@@ -157,12 +154,10 @@ pyscripts/bbb.dat
 pyscripts/cdf4.py
 pyscripts/com.dat
 pyscripts/convert.py
-pyscripts/convert.pyc
 pyscripts/convert1.py
 pyscripts/convertvsh5.py
 pyscripts/double.py
 pyscripts/filelists.py
-pyscripts/filelists.pyc
 pyscripts/flx.dat
 pyscripts/grd.dat
 pyscripts/hdf5.py
@@ -204,9 +199,7 @@ pyscripts/contrib/ue_plot.py
 pyscripts/contrib/utils.py
 pytests/README
 pytests/__init__.py
-pytests/__init__.pyc
 pytests/uedge_test.py
-pytests/uedge_test.pyc
 pytests/level_1/dotest.py
 pytests/level_1/template.py
 pytests/level_1/pyres/template.res
