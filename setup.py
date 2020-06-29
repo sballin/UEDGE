@@ -57,33 +57,19 @@ fcompiler = FCompiler(machine=machine,
 
 class uedgeBuild(build):
     def run(self):
-        # with python2 everything is put into a single uedgeC.so file
-        if sys.hexversion < 0x03000000:
-            if petsc == 0:
-                call(['make', '-f', 'Makefile.Forthon'])
-            else:
-                call(['make', '-f', 'Makefile.PETSc'])
-            build.run(self)
+        if petsc == 0:
+            call(['make', '-f', 'Makefile.Forthon3'])
         else:
-            if petsc == 0:
-                call(['make', '-f', 'Makefile.Forthon3'])
-            else:
-                call(['make', '-f', 'Makefile.PETSc3'])
-            build.run(self)
+            call(['make', '-f', 'Makefile.PETSc3'])
+        build.run(self)
 
 
 class uedgeClean(build):
     def run(self):
-        if sys.hexversion < 0x03000000:
-            if petsc == 0:
-                call(['make', '-f', 'Makefile.Forthon', 'clean'])
-            else:
-                call(['make', '-f', 'Makefile.PETSc', 'clean'])
+        if petsc == 0:
+            call(['make', '-f', 'Makefile.Forthon3', 'clean'])
         else:
-            if petsc == 0:
-                call(['make', '-f', 'Makefile.Forthon3', 'clean'])
-            else:
-                call(['make', '-f', 'Makefile.PETSc3', 'clean'])
+            call(['make', '-f', 'Makefile.PETSc3', 'clean'])
 
 
 uedgepkgs = ['aph', 'api', 'bbb', 'com', 'flx', 'grd', 'svr', 'wdf']
@@ -97,40 +83,11 @@ uedgeobjects = []
 
 # add here any extra dot o files other than pkg.o, pkg_p.o
 
-
-if sys.hexversion < 0x03000000:
-    builddir = 'build'
-    for pkg in uedgepkgs:
-        uedgeobjects = uedgeobjects + makeobjects(pkg)
-    uedgeobjects = uedgeobjects + ['aphrates.o', 'aphread.o',
-                                   'apifcn.o', 'apip93.o', 'apisorc.o',
-                                   'fimp.o', 'fmombal.o', 'inelrates.o',
-                                   'sputt.o', 'boundary.o', 'convert.o',
-                                   'geometry.o', 'griddubl.o', 'oderhs.o',
-                                   'odesetup.o', 'odesolve.o', 'potencur.o',
-                                   'ext_neutrals.o',
-                                   'turbulence.o', 'blasext.o', 'brent.o',
-                                   'comutil.o', 'misc.o', 'mnbrak.o',
-                                   'flxcomp.o', 'flxdriv.o', 'flxread.o',
-                                   'flxwrit.o', 'grdcomp.o', 'grddriv.o',
-                                   'grdinit.o', 'grdread.o', 'grdwrit.o',
-                                   'daspk.o', 'nksol.o', 'svrut1.o', 'svrut2.o',
-                                   'svrut3.o', 'svrut4.o', 'vodpk.o', 'uoa.o',
-                                   'dsum.o', 'dummy_py.o', 'error.o', 'getmsg.o',
-                                   'ssum.o', 'daux1.o', 'wdf.o']
-
-    if petsc:
-        uedgeobjects = uedgeobjects + ['petsc-uedge.o', 'petscMod.o']
-
-    if parallel:
-        # add extra dot o's needed if we're parallel
-        uedgeobjects = uedgeobjects + []
-else:
-    dummydist = Distribution()
-    dummydist.parse_command_line()
-    dummybuild = dummydist.get_command_obj('build')
-    dummybuild.finalize_options()
-    builddir = dummybuild.build_temp
+dummydist = Distribution()
+dummydist.parse_command_line()
+dummybuild = dummydist.get_command_obj('build')
+dummybuild.finalize_options()
+builddir = dummybuild.build_temp
 
 uedgeobjects = map(lambda p: os.path.join(builddir, p), uedgeobjects)
 

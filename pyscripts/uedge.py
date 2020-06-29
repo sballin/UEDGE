@@ -1,50 +1,38 @@
 try:
-   import IPython
-   from IPython.terminal.prompts import Prompts,Token
-   from IPython.terminal.embed import InteractiveShellEmbed
+    import IPython
+    from IPython.terminal.prompts import Prompts,Token
+    from IPython.terminal.embed import InteractiveShellEmbed
 except:
-   pass
+    pass
 
 try:
-   from traitlets.config.loader import Config
+    from traitlets.config.loader import Config
 except:
-   pass
+    pass
 
 import sys,os,__main__
 
 import numpy as np
 ArrayType = np.ndarray
 
-if sys.hexversion >= 0x03000000:
-    # --- With Python3, the so files of each Fortran package are imported
-    # --- separately. The dlopen flag needs to be set so that cross references
-    # --- among the packages can be satisfied.
-    sys.setdlopenflags(os.RTLD_LAZY | os.RTLD_GLOBAL)
+# --- With Python3, the so files of each Fortran package are imported
+# --- separately. The dlopen flag needs to be set so that cross references
+# --- among the packages can be satisfied.
+sys.setdlopenflags(os.RTLD_LAZY | os.RTLD_GLOBAL)
 
 from . import uedgeC
 from .uedgeC import *
 
 from Forthon import *
 
-if sys.hexversion >= 0x03000000:
-
-    from .compy import *
-    from .svrpy import *
-    from .grdpy import *
-    from .flxpy import *
-    from .bbbpy import *
-    from .wdfpy import *
-    from .apipy import *
-    from .aphpy import *
-else:
-    from wdfpy import *
-    from svrpy import *
-    from grdpy import *
-    from flxpy import *
-    from bbbpy import *
-    from apipy import *
-    from aphpy import *
-    from compy import *
+from .compy import *
+from .svrpy import *
+from .grdpy import *
+from .flxpy import *
+from .bbbpy import *
+from .wdfpy import *
+from .apipy import *
+from .aphpy import *
 
 import time
 import os.path
@@ -53,12 +41,13 @@ warp_version = "$Id: uedge.py,v 7.4 2019/11/12 21:10:56 meyer8 Exp $"
 # import all of the neccesary packages
 
 
-
 def gettypecode(x):
     return x.dtype.char
 
+
 def oldnonzero(a):
     return a.nonzero()[0]
+
 
 # Print a greeting
 # mmiah: Actually, lets not.
@@ -106,14 +95,13 @@ except:
 
 
 try:
+    class MyPrompt(Prompts):
+        def in_prompt_tokens(self, cli=None):
+            return [(Token.Prompt, 'UEDGE>>> ')]
+        def out_prompt_tokens(self, cli=None):
+            return [(Token.Prompt, 'UEDGE>>> ')]
 
-   class MyPrompt(Prompts):
-     def in_prompt_tokens(self, cli=None):
-         return [(Token.Prompt, 'UEDGE>>> ')]
-     def out_prompt_tokens(self, cli=None):
-         return [(Token.Prompt, 'UEDGE>>> ')]
-
-   get_ipython
+    get_ipython
 except:
    sys.ps1='UEDGE>>> '
 else:
