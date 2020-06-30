@@ -5,81 +5,25 @@ from uedge import bbb, __version__
 from uedge.uedge_lists import *
 
 
-def hdf5_restore(file):
+def hdf5_restore(filename):
     """
     Read a hdf5 file previously written from pyUedge. This reads the file recursively 
     and will attempt to restore all datasets. This will restore a file saved by either
     hdf5_save or hdf5_dump.
     """
-    try:
-        hf = h5py.File(file, 'r')
-    except:
-        print("Couldn't open hdf5 file ", file)
-        raise
-
-    try:
-        dummy = hf['bbb']   # force an exception if the group not there
-        hfb = hf.get('bbb')
-        try:
-            hdf5_restore_dump(file,hdffile=hf)
-        except:
-            raise
-        
-
-    except:
+    hf = h5py.File(filename, 'r')
+    
+    if 'bbb' in hf.keys():
+        hdf5_restore_dump(filename, hdffile=hf)
+    else:
         print("Old style hdf5 file")
-        try:
-            bbb.ngs[...] = np.array(hf.get('ngs@bbb'))
-        except ValueError as error:
-            print("Couldn't read ngs from  ", file)
-            print(error)
-        except:
-            print("Couldn't read ngs from  ", file)
-        try:
-            bbb.nis[...] = np.array(hf.get('nis@bbb'))
-        except ValueError as error:
-            print("Couldn't read nis from  ", file)
-            print(error)
-        except:
-            print("Couldn't read nis from  ", file)
-        try:
-            bbb.phis[...] = np.array(hf.get('phis@bbb'))
-        except ValueError as error:
-            print("Couldn't read phis from  ", file)
-            print(error)
-        except:
-            print("Couldn't read phis from  ", file)
-        try:
-            bbb.tes[...] = np.array(hf.get('tes@bbb'))
-        except ValueError as error:
-            print("Couldn't read tes from  ", file)
-            print(error)
-        except:
-            print("Couldn't read tes from  ", file)
-        try:
-            bbb.tis[...] = np.array(hf.get('tis@bbb'))
-        except ValueError as error:
-            print("Couldn't read tis from  ", file)
-            print(error)
-        except:
-            print("Couldn't read tis from  ", file)
-        try:
-            bbb.ups[...] = np.array(hf.get('ups@bbb'))
-        except ValueError as error:
-            print("Couldn't read ups from  ", file)
-            print(error)
-        except:
-            print("Couldn't read ups from  ", file)
-        try:
-            bbb.tgs[...] = np.array(hf.get('tgs@bbb'))
-        except ValueError as error:
-            print("Couldn't read tgs from  ", file)
-            print(error)
-        except:
-            print("Couldn't read tgs from  ", file)
+        for var in ['ngs', 'nis', 'phis', 'tes', 'tis', 'ups', 'tgs']:
+            try:
+                setattr(bbb, var, np.array(hf[var + '@bbb']))
+            except Exception as e:
+                print(e)
 
     hf.close()
-    return True
 
 
 def hdf5_save(file, varlist=['bbb.ngs', 'bbb.ng',
@@ -182,7 +126,6 @@ def hdf5_save(file, varlist=['bbb.ngs', 'bbb.ng',
             raise
 
     hf.close()
-    return True
 
 
 def hdf5_dump(file, packages=list_packages(objects=1), vars=None, globals=None):
@@ -249,7 +192,6 @@ def hdf5_dump(file, packages=list_packages(objects=1), vars=None, globals=None):
                 raise
 
     hf.close()
-    return True
 
 
 def h5py_dataset_iterator(g, prefix=''):
@@ -312,5 +254,3 @@ def hdf5_restore_dump(file, hdffile=None):
 
     if hdffile == None:
         hf.close()
-    
-    return True
